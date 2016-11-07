@@ -56,9 +56,6 @@ objects:
           volumes:
           - emptyDir: {}
             name: vol-${NAME}
-          - name: ssl-certs
-            secret:
-              secretName: qdrouterd-certs
       triggers:
       - type: ConfigChange
       - imageChangeParams:
@@ -73,9 +70,6 @@ objects:
   - description: Storage capacity required for volume claims
     name: STORAGE_CAPACITY
     value: 2Gi
-  - description: The link capacity setting for router
-    name: ROUTER_LINK_CAPACITY
-    value: '50'
   - description: A valid name for the instance
     name: NAME
     required: true
@@ -145,9 +139,6 @@ objects:
           - name: vol-${NAME}
             persistentVolumeClaim:
               claimName: pvc-${NAME}
-          - name: ssl-certs
-            secret:
-              secretName: qdrouterd-certs
       triggers:
       - type: ConfigChange
       - imageChangeParams:
@@ -162,9 +153,6 @@ objects:
   - description: Storage capacity required for volume claims
     name: STORAGE_CAPACITY
     value: 2Gi
-  - description: The link capacity setting for router
-    name: ROUTER_LINK_CAPACITY
-    value: '50'
   - description: A valid name for the instance
     name: NAME
     required: true
@@ -221,30 +209,6 @@ objects:
             - mountPath: "/var/run/artemis"
               name: vol-${NAME}
           - env:
-            - name: LINK_CAPACITY
-              value: "${ROUTER_LINK_CAPACITY}"
-            - name: TOPIC_NAME
-              value: "${ADDRESS}"
-            image: router
-            livenessProbe:
-              tcpSocket:
-                port: amqp
-            name: router
-            ports:
-            - containerPort: 5672
-              name: amqp
-              protocol: TCP
-            - containerPort: 55673
-              name: internal
-              protocol: TCP
-            - containerPort: 5671
-              name: amqps
-              protocol: TCP
-            volumeMounts:
-            - mountPath: "/etc/qpid-dispatch/ssl"
-              name: ssl-certs
-              readOnly: true
-          - env:
             - name: TOPIC_NAME
               value: "${ADDRESS}"
             image: topic-forwarder
@@ -259,9 +223,6 @@ objects:
           volumes:
           - emptyDir: {}
             name: vol-${NAME}
-          - name: ssl-certs
-            secret:
-              secretName: qdrouterd-certs
       triggers:
       - type: ConfigChange
       - imageChangeParams:
@@ -275,14 +236,6 @@ objects:
       - imageChangeParams:
           automatic: true
           containerNames:
-          - router
-          from:
-            kind: ImageStreamTag
-            name: router:latest
-        type: ImageChange
-      - imageChangeParams:
-          automatic: true
-          containerNames:
           - forwarder
           from:
             kind: ImageStreamTag
@@ -292,9 +245,6 @@ objects:
   - description: Storage capacity required for volume claims
     name: STORAGE_CAPACITY
     value: 2Gi
-  - description: The link capacity setting for router
-    name: ROUTER_LINK_CAPACITY
-    value: '50'
   - description: A valid name for the instance
     name: NAME
     required: true
@@ -361,30 +311,6 @@ objects:
             - mountPath: "/var/run/artemis"
               name: vol-${NAME}
           - env:
-            - name: LINK_CAPACITY
-              value: "${ROUTER_LINK_CAPACITY}"
-            - name: TOPIC_NAME
-              value: "${ADDRESS}"
-            image: router
-            livenessProbe:
-              tcpSocket:
-                port: amqp
-            name: router
-            ports:
-            - containerPort: 5672
-              name: amqp
-              protocol: TCP
-            - containerPort: 55673
-              name: internal
-              protocol: TCP
-            - containerPort: 5671
-              name: amqps
-              protocol: TCP
-            volumeMounts:
-            - mountPath: "/etc/qpid-dispatch/ssl"
-              name: ssl-certs
-              readOnly: true
-          - env:
             - name: TOPIC_NAME
               value: "${ADDRESS}"
             image: topic-forwarder
@@ -400,9 +326,6 @@ objects:
           - name: vol-${NAME}
             persistentVolumeClaim:
               claimName: pvc-${NAME}
-          - name: ssl-certs
-            secret:
-              secretName: qdrouterd-certs
       triggers:
       - type: ConfigChange
       - imageChangeParams:
@@ -416,14 +339,6 @@ objects:
       - imageChangeParams:
           automatic: true
           containerNames:
-          - router
-          from:
-            kind: ImageStreamTag
-            name: router:latest
-        type: ImageChange
-      - imageChangeParams:
-          automatic: true
-          containerNames:
           - forwarder
           from:
             kind: ImageStreamTag
@@ -433,9 +348,6 @@ objects:
   - description: Storage capacity required for volume claims
     name: STORAGE_CAPACITY
     value: 2Gi
-  - description: The link capacity setting for router
-    name: ROUTER_LINK_CAPACITY
-    value: '50'
   - description: A valid name for the instance
     name: NAME
     required: true

@@ -51,9 +51,6 @@ objects:
         volumes:
         - emptyDir: {}
           name: vol-${NAME}
-        - name: ssl-certs
-          secret:
-            secretName: qdrouterd-certs
     triggers:
     - type: ConfigChange
     - imageChangeParams:
@@ -68,9 +65,6 @@ parameters:
 - description: Storage capacity required for volume claims
   name: STORAGE_CAPACITY
   value: 2Gi
-- description: The link capacity setting for router
-  name: ROUTER_LINK_CAPACITY
-  value: '50'
 - description: A valid name for the instance
   name: NAME
   required: true

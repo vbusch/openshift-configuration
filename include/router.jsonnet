@@ -27,8 +27,8 @@ local is = import "imagestream.jsonnet";
           "value": "${ROUTER_LINK_CAPACITY}"
         },
       "env": if addressEnv == ""
-        then [linkEnv]
-        else [linkEnv, addressEnv],
+        then [linkEnv ]
+        else [linkEnv, addressEnv ],
       "ports": if secure
         then [routerPort, internalPort, secureRouterPort] 
         else [routerPort, internalPort],

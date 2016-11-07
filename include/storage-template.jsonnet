@@ -1,6 +1,5 @@
 local version = std.extVar("VERSION");
 local broker = import "broker.jsonnet";
-local router = import "router.jsonnet";
 local forwarder = import "forwarder.jsonnet";
 {
   template(multicast, persistence, secure)::
@@ -61,19 +60,6 @@ local forwarder = import "forwarder.jsonnet";
               "imageChangeParams": {
                 "automatic": true,
                 "containerNames": [
-                  "router"
-                ],
-                "from": {
-                  "kind": "ImageStreamTag",
-                  "name": "router:" + version
-                }
-              }
-            },
-            {
-              "type": "ImageChange",
-              "imageChangeParams": {
-                "automatic": true,
-                "containerNames": [
                   "forwarder"
                 ],
                 "from": {
@@ -98,11 +84,11 @@ local forwarder = import "forwarder.jsonnet";
                 then broker.persistedVolume(volumeName, claimName)
                 else broker.volume(volumeName),
               "volumes": if secure
-                then [brokerVolume, router.secret_volume()]
+                then [brokerVolume]
                 else [brokerVolume],
 
               "containers": if multicast
-                then [ broker.container(volumeName, addressEnv), router.container(secure, addressEnv), forwarder.container(addressEnv) ]
+                then [ broker.container(volumeName, addressEnv), forwarder.container(addressEnv) ]
                 else [ broker.container(volumeName, addressEnv) ]
             }
           }
@@ -133,11 +119,6 @@ local forwarder = import "forwarder.jsonnet";
           "name": "STORAGE_CAPACITY",
           "description": "Storage capacity required for volume claims",
           "value": "2Gi"
-        },
-        {
-          "name": "ROUTER_LINK_CAPACITY",
-          "description": "The link capacity setting for router",
-          "value": "50"
         },
         {
           "name": "NAME",
