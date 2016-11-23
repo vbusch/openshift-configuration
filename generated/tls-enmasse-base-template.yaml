@@ -558,17 +558,17 @@ objects:
   metadata:
     labels:
       app: enmasse
-      name: ragent
+      component: ragent
     name: ragent
   spec:
     replicas: 1
     selector:
-      name: ragent
+      component: ragent
     template:
       metadata:
         labels:
           app: enmasse
-          name: ragent
+          component: ragent
       spec:
         containers:
         - image: ragent
@@ -710,17 +710,17 @@ objects:
   metadata:
     labels:
       app: enmasse
-      name: subserv
+      component: subserv
     name: subserv
   spec:
     replicas: 1
     selector:
-      name: subserv
+      component: subserv
     template:
       metadata:
         labels:
           app: enmasse
-          name: subserv
+          component: subserv
       spec:
         containers:
         - image: subserv
