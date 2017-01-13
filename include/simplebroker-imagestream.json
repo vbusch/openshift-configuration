@@ -1,0 +1,25 @@
+{
+  "apiVersion": "v1",
+  "kind": "ImageStream",
+  "metadata": {
+    "labels": {
+      "app": "enmasse"
+    },
+    "name": "simplebroker"
+  },
+  "spec": {
+    "dockerImageRepository": "lulf/simplebroker",
+    "importPolicy": {
+      "scheduled": true
+    },
+    "tags": [
+      {
+        "from": {
+          "kind": "DockerImage",
+          "name": "lulf/simplebroker:latest"
+        },
+        "name": "latest"
+      }
+    ]
+  }
+}
