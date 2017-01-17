@@ -10,7 +10,6 @@ objects:
   kind: Template
   metadata:
     labels:
-      addressType: queue
       app: enmasse
     name: tls-queue-inmemory
   objects:
@@ -18,10 +17,7 @@ objects:
     kind: DeploymentConfig
     metadata:
       labels:
-        address: "${ADDRESS}"
         app: enmasse
-        multicast: 'false'
-        store_and_forward: 'true'
         type: address-config
       name: "${NAME}"
     spec:
@@ -40,6 +36,8 @@ objects:
           - env:
             - name: QUEUE_NAME
               value: "${ADDRESS}"
+            - name: QUEUE_NAMES
+              value: "${ADDRESS_LIST}"
             image: artemis
             lifecycle:
               preStop:
@@ -87,11 +85,13 @@ objects:
   - description: The address to use for the queue
     name: ADDRESS
     required: true
+  - description: The address to use for the broker
+    name: ADDRESS_LIST
+    required: false
 - apiVersion: v1
   kind: Template
   metadata:
     labels:
-      addressType: queue
       app: enmasse
     name: tls-queue-persisted
   objects:
@@ -111,10 +111,7 @@ objects:
     kind: DeploymentConfig
     metadata:
       labels:
-        address: "${ADDRESS}"
         app: enmasse
-        multicast: 'false'
-        store_and_forward: 'true'
         type: address-config
       name: "${NAME}"
     spec:
@@ -133,6 +130,8 @@ objects:
           - env:
             - name: QUEUE_NAME
               value: "${ADDRESS}"
+            - name: QUEUE_NAMES
+              value: "${ADDRESS_LIST}"
             image: artemis
             lifecycle:
               preStop:
@@ -181,11 +180,13 @@ objects:
   - description: The address to use for the queue
     name: ADDRESS
     required: true
+  - description: The address to use for the broker
+    name: ADDRESS_LIST
+    required: false
 - apiVersion: v1
   kind: Template
   metadata:
     labels:
-      addressType: topic
       app: enmasse
     name: tls-topic-inmemory
   objects:
@@ -193,10 +194,7 @@ objects:
     kind: DeploymentConfig
     metadata:
       labels:
-        address: "${ADDRESS}"
         app: enmasse
-        multicast: 'true'
-        store_and_forward: 'true'
         type: address-config
       name: "${NAME}"
     spec:
@@ -236,8 +234,8 @@ objects:
           - env:
             - name: LINK_CAPACITY
               value: "${ROUTER_LINK_CAPACITY}"
-            - name: TOPIC_NAME
-              value: "${ADDRESS}"
+            - - name: TOPIC_NAME
+                value: "${ADDRESS}"
             image: router
             livenessProbe:
               tcpSocket:
@@ -258,8 +256,8 @@ objects:
               name: ssl-certs
               readOnly: true
           - env:
-            - name: TOPIC_NAME
-              value: "${ADDRESS}"
+            - - name: TOPIC_NAME
+                value: "${ADDRESS}"
             image: topic-forwarder
             livenessProbe:
               httpGet:
@@ -314,11 +312,13 @@ objects:
   - description: The address to use for the topic
     name: ADDRESS
     required: true
+  - description: The address to use for the broker
+    name: ADDRESS_LIST
+    required: false
 - apiVersion: v1
   kind: Template
   metadata:
     labels:
-      addressType: topic
       app: enmasse
     name: tls-topic-persisted
   objects:
@@ -338,10 +338,7 @@ objects:
     kind: DeploymentConfig
     metadata:
       labels:
-        address: "${ADDRESS}"
         app: enmasse
-        multicast: 'true'
-        store_and_forward: 'true'
         type: address-config
       name: "${NAME}"
     spec:
@@ -381,8 +378,8 @@ objects:
           - env:
             - name: LINK_CAPACITY
               value: "${ROUTER_LINK_CAPACITY}"
-            - name: TOPIC_NAME
-              value: "${ADDRESS}"
+            - - name: TOPIC_NAME
+                value: "${ADDRESS}"
             image: router
             livenessProbe:
               tcpSocket:
@@ -403,8 +400,8 @@ objects:
               name: ssl-certs
               readOnly: true
           - env:
-            - name: TOPIC_NAME
-              value: "${ADDRESS}"
+            - - name: TOPIC_NAME
+                value: "${ADDRESS}"
             image: topic-forwarder
             livenessProbe:
               httpGet:
@@ -460,6 +457,9 @@ objects:
   - description: The address to use for the topic
     name: ADDRESS
     required: true
+  - description: The address to use for the broker
+    name: ADDRESS_LIST
+    required: false
 - apiVersion: v1
   kind: Template
   metadata:
@@ -471,10 +471,7 @@ objects:
     kind: ConfigMap
     metadata:
       labels:
-        address: "${ADDRESS}"
         app: enmasse
-        multicast: "${MULTICAST}"
-        store_and_forward: 'false'
         type: address-config
       name: "${NAME}"
   parameters:
@@ -484,9 +481,9 @@ objects:
   - description: The address to use for the address
     name: ADDRESS
     required: true
-  - description: If the address should have multicast semantics or not
-    name: MULTICAST
-    required: true
+  - description: The list of addresses to use for this flavor
+    name: ADDRESS_LIST
+    required: false
 - apiVersion: v1
   kind: Route
   metadata:

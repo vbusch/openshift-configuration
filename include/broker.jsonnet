@@ -17,7 +17,7 @@ local common = import "common.jsonnet";
           "containerPort": 61616
         }
       ],
-      "env": [ addressEnv ],
+      "env": addressEnv,
       "volumeMounts": [
         {
           "name": volumeName,

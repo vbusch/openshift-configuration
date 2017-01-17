@@ -3,7 +3,6 @@ apiVersion: v1
 kind: Template
 metadata:
   labels:
-    addressType: queue
     app: enmasse
   name: queue-persisted
 objects:
@@ -23,10 +22,7 @@ objects:
   kind: DeploymentConfig
   metadata:
     labels:
-      address: "${ADDRESS}"
       app: enmasse
-      multicast: 'false'
-      store_and_forward: 'true'
       type: address-config
     name: "${NAME}"
   spec:
@@ -45,6 +41,8 @@ objects:
         - env:
           - name: QUEUE_NAME
             value: "${ADDRESS}"
+          - name: QUEUE_NAMES
+            value: "${ADDRESS_LIST}"
           image: artemis
           lifecycle:
             preStop:
@@ -90,3 +88,6 @@ parameters:
 - description: The address to use for the queue
   name: ADDRESS
   required: true
+- description: The address to use for the broker
+  name: ADDRESS_LIST
+  required: false

@@ -3,7 +3,6 @@ apiVersion: v1
 kind: Template
 metadata:
   labels:
-    addressType: topic
     app: enmasse
   name: tls-topic-persisted
 objects:
@@ -23,10 +22,7 @@ objects:
   kind: DeploymentConfig
   metadata:
     labels:
-      address: "${ADDRESS}"
       app: enmasse
-      multicast: 'true'
-      store_and_forward: 'true'
       type: address-config
     name: "${NAME}"
   spec:
@@ -66,8 +62,8 @@ objects:
         - env:
           - name: LINK_CAPACITY
             value: "${ROUTER_LINK_CAPACITY}"
-          - name: TOPIC_NAME
-            value: "${ADDRESS}"
+          - - name: TOPIC_NAME
+              value: "${ADDRESS}"
           image: router
           livenessProbe:
             tcpSocket:
@@ -88,8 +84,8 @@ objects:
             name: ssl-certs
             readOnly: true
         - env:
-          - name: TOPIC_NAME
-            value: "${ADDRESS}"
+          - - name: TOPIC_NAME
+              value: "${ADDRESS}"
           image: topic-forwarder
           livenessProbe:
             httpGet:
@@ -145,3 +141,6 @@ parameters:
 - description: The address to use for the topic
   name: ADDRESS
   required: true
+- description: The address to use for the broker
+  name: ADDRESS_LIST
+  required: false

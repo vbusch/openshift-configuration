@@ -12,12 +12,12 @@ local flavor = import "flavorgen.jsonnet";
     },
     "data": {
       local flavors = {
-        "vanilla-queue": flavor.generate(secure, "queue-inmemory", null),
-        "vanilla-topic": flavor.generate(secure, "topic-inmemory", null),
-        "small-persisted-queue": flavor.generate(secure, "queue-persisted", "1Gi"),
-        "large-persisted-queue": flavor.generate(secure, "queue-persisted", "10Gi"),
-        "small-persisted-topic": flavor.generate(secure, "topic-persisted", "1Gi"),
-        "large-persisted-topic": flavor.generate(secure, "topic-persisted", "10Gi"),
+        "vanilla-queue": flavor.generate(secure, "queue-inmemory", null, true),
+        "vanilla-topic": flavor.generate(secure, "topic-inmemory", null, false),
+        "small-persisted-queue": flavor.generate(secure, "queue-persisted", "1Gi", false),
+        "large-persisted-queue": flavor.generate(secure, "queue-persisted", "10Gi", false),
+        "small-persisted-topic": flavor.generate(secure, "topic-persisted", "1Gi", false),
+        "large-persisted-topic": flavor.generate(secure, "topic-persisted", "10Gi", false),
       },
       "json": std.toString(flavors),
     }

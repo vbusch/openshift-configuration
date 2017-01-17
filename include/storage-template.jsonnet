@@ -5,7 +5,7 @@ local forwarder = import "forwarder.jsonnet";
 {
   template(multicast, persistence, secure)::
     local addrtype = (if multicast then "topic" else "queue");
-    local addressEnv = (if multicast then { name: "TOPIC_NAME", value: "${ADDRESS}" } else { name: "QUEUE_NAME", value: "${ADDRESS}" });
+    local addressEnv = (if multicast then [{ name: "TOPIC_NAME", value: "${ADDRESS}" }] else [{ name: "QUEUE_NAME", value: "${ADDRESS}"}, { name: "QUEUE_NAMES", value: "${ADDRESS_LIST}" }]);
     local volumeName = "vol-${NAME}";
     local templateName = "%s%s-%s" % [if secure then "tls-" else "", addrtype, (if persistence then "persisted" else "inmemory")];
     local claimName = "pvc-${NAME}";
@@ -15,7 +15,6 @@ local forwarder = import "forwarder.jsonnet";
       "metadata": {
         "name": templateName,
         "labels": {
-          "addressType": addrtype,
           "app": "enmasse"
         }
       },
@@ -27,10 +26,7 @@ local forwarder = import "forwarder.jsonnet";
           "name": "${NAME}",
           "labels": {
             "app": "enmasse",
-            "type": "address-config",
-            "address": "${ADDRESS}",
-            "store_and_forward": "true",
-            "multicast": if multicast then "true" else "false"
+            "type": "address-config"
           }
         },
         "spec": {
@@ -117,7 +113,7 @@ local forwarder = import "forwarder.jsonnet";
         "metadata": {
           "name": claimName,
           "labels": {
-            "app": "enmasse"
+            "app": "enmasse",
           }
         },
         "spec": {
@@ -154,6 +150,11 @@ local forwarder = import "forwarder.jsonnet";
           "name": "ADDRESS",
           "description": "The address to use for the %s" % [addrtype],
           "required": true
+        },
+        {
+          "name": "ADDRESS_LIST",
+          "description": "The address to use for the broker", 
+          "required": false
         }
       ]
     }
