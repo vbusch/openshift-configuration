@@ -5,7 +5,7 @@ local common = import "common.jsonnet";
   container(addressEnv)::
     {
       "name": "forwarder",
-      "env": [ addressEnv ],
+      "env": addressEnv,
       "image": "topic-forwarder",
       "ports": [
         {

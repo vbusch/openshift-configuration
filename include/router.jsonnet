@@ -26,9 +26,9 @@ local common = import "common.jsonnet";
           "name": "LINK_CAPACITY",
           "value": "${ROUTER_LINK_CAPACITY}"
         },
-      "env": if addressEnv == ""
+      "env": if addressEnv == []
         then [linkEnv]
-        else [linkEnv, addressEnv],
+        else [linkEnv] + addressEnv,
       "ports": if secure
         then [routerPort, internalPort, secureRouterPort] 
         else [routerPort, internalPort],

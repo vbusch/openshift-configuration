@@ -228,8 +228,8 @@ objects:
           - env:
             - name: LINK_CAPACITY
               value: "${ROUTER_LINK_CAPACITY}"
-            - - name: TOPIC_NAME
-                value: "${ADDRESS}"
+            - name: TOPIC_NAME
+              value: "${ADDRESS}"
             image: router
             livenessProbe:
               tcpSocket:
@@ -243,8 +243,8 @@ objects:
               name: internal
               protocol: TCP
           - env:
-            - - name: TOPIC_NAME
-                value: "${ADDRESS}"
+            - name: TOPIC_NAME
+              value: "${ADDRESS}"
             image: topic-forwarder
             livenessProbe:
               httpGet:
@@ -362,8 +362,8 @@ objects:
           - env:
             - name: LINK_CAPACITY
               value: "${ROUTER_LINK_CAPACITY}"
-            - - name: TOPIC_NAME
-                value: "${ADDRESS}"
+            - name: TOPIC_NAME
+              value: "${ADDRESS}"
             image: router
             livenessProbe:
               tcpSocket:
@@ -377,8 +377,8 @@ objects:
               name: internal
               protocol: TCP
           - env:
-            - - name: TOPIC_NAME
-                value: "${ADDRESS}"
+            - name: TOPIC_NAME
+              value: "${ADDRESS}"
             image: topic-forwarder
             livenessProbe:
               httpGet:
