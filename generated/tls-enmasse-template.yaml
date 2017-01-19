@@ -833,10 +833,11 @@ objects:
     json: '{"large-persisted-queue": {"shared": false, "templateName": "tls-queue-persisted",
       "templateParameters": {"STORAGE_CAPACITY": "10Gi"}}, "large-persisted-topic":
       {"shared": false, "templateName": "tls-topic-persisted", "templateParameters":
-      {"STORAGE_CAPACITY": "10Gi"}}, "small-persisted-queue": {"shared": false, "templateName":
+      {"STORAGE_CAPACITY": "10Gi"}}, "lowvolume-queue": {"shared": true, "templateName":
+      "tls-queue-inmemory"}, "small-persisted-queue": {"shared": false, "templateName":
       "tls-queue-persisted", "templateParameters": {"STORAGE_CAPACITY": "1Gi"}}, "small-persisted-topic":
       {"shared": false, "templateName": "tls-topic-persisted", "templateParameters":
-      {"STORAGE_CAPACITY": "1Gi"}}, "vanilla-queue": {"shared": true, "templateName":
+      {"STORAGE_CAPACITY": "1Gi"}}, "vanilla-queue": {"shared": false, "templateName":
       "tls-queue-inmemory"}, "vanilla-topic": {"shared": false, "templateName": "tls-topic-inmemory"}}'
   kind: ConfigMap
   metadata:

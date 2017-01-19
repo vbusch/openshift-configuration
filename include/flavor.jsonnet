@@ -12,7 +12,8 @@ local flavor = import "flavorgen.jsonnet";
     },
     "data": {
       local flavors = {
-        "vanilla-queue": flavor.generate(secure, "queue-inmemory", null, true),
+        "vanilla-queue": flavor.generate(secure, "queue-inmemory", null, false),
+        "lowvolume-queue": flavor.generate(secure, "queue-inmemory", null, true),
         "vanilla-topic": flavor.generate(secure, "topic-inmemory", null, false),
         "small-persisted-queue": flavor.generate(secure, "queue-persisted", "1Gi", false),
         "large-persisted-queue": flavor.generate(secure, "queue-persisted", "10Gi", false),

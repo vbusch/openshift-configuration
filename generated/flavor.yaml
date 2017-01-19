@@ -4,10 +4,11 @@ data:
   json: '{"large-persisted-queue": {"shared": false, "templateName": "queue-persisted",
     "templateParameters": {"STORAGE_CAPACITY": "10Gi"}}, "large-persisted-topic":
     {"shared": false, "templateName": "topic-persisted", "templateParameters": {"STORAGE_CAPACITY":
-    "10Gi"}}, "small-persisted-queue": {"shared": false, "templateName": "queue-persisted",
+    "10Gi"}}, "lowvolume-queue": {"shared": true, "templateName": "queue-inmemory"},
+    "small-persisted-queue": {"shared": false, "templateName": "queue-persisted",
     "templateParameters": {"STORAGE_CAPACITY": "1Gi"}}, "small-persisted-topic": {"shared":
     false, "templateName": "topic-persisted", "templateParameters": {"STORAGE_CAPACITY":
-    "1Gi"}}, "vanilla-queue": {"shared": true, "templateName": "queue-inmemory"},
+    "1Gi"}}, "vanilla-queue": {"shared": false, "templateName": "queue-inmemory"},
     "vanilla-topic": {"shared": false, "templateName": "topic-inmemory"}}'
 kind: ConfigMap
 metadata:
