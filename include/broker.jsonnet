@@ -50,5 +50,13 @@ local common = import "common.jsonnet";
       "persistentVolumeClaim": {
           "claimName": claimName
       }
+    },
+
+  hawkularVolume(name)::
+    {
+      "name": "hawkular-openshift-agent",
+      "configMap": {
+        "name": name
+      }
     }
 }

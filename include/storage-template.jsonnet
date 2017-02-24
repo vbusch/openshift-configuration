@@ -22,6 +22,34 @@ local forwarder = import "forwarder.jsonnet";
         }
       },
 
+      local hawkularConfig = {
+        "apiVersion": "v1",
+        "kind": "ConfigMap",
+        "metadata": {
+          "name": "hawkular-config-${NAME}"
+        },
+        "data": {
+          "hawkular-openshift-agent": std.toString({
+            "endpoints": [
+              {
+                "type": "jolokia",
+                "protocol": "http",
+                "port": 8161,
+                "path": "/jolokia",
+                "collection_interval": "60s",
+                "metrics": [
+                  {
+                    "name": "java.lang:type=Memory#HeapMemoryUsage#used",
+                    "type": "gauge",
+                    "id": "VM Heap Memory Used"
+                  }
+                ]
+              }
+            ]
+          })
+        }
+      },
+
       local controller = {
         "apiVersion": "extensions/v1beta1",
         "kind": "Deployment",
@@ -44,12 +72,13 @@ local forwarder = import "forwarder.jsonnet";
               }
             },
             "spec": {
+              local hawkularVolume = broker.hawkularVolume("hawkular-config-${NAME}"),
               local brokerVolume = if persistence
                 then broker.persistedVolume(volumeName, claimName)
                 else broker.volume(volumeName),
               "volumes": if secure
-                then [brokerVolume, router.secret_volume()]
-                else [brokerVolume],
+                then [brokerVolume, router.secret_volume(), hawkularVolume ]
+                else [brokerVolume, hawkularVolume ],
 
               "containers": if multicast
                 then [ broker.container(volumeName, broker_repo, addressEnv), router.container(secure, router_repo, addressEnv, "256Mi"), forwarder.container(forwarder_repo, addressEnv) ]
@@ -96,8 +125,8 @@ local forwarder = import "forwarder.jsonnet";
         }
       },
       "objects": if persistence
-        then [pvc, controller, config]
-        else [controller, config],
+        then [pvc, controller, config, hawkularConfig]
+        else [controller, config, hawkularConfig],
       "parameters": [
         {
           "name": "STORAGE_CAPACITY",

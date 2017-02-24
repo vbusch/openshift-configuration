@@ -89,6 +89,9 @@ objects:
         volumes:
         - emptyDir: {}
           name: vol-${NAME}
+        - configMap:
+            name: hawkular-config-${NAME}
+          name: hawkular-openshift-agent
 - apiVersion: v1
   data:
     "${ADDRESS}": '{"store_and_forward": true, "multicast": true}'
@@ -99,6 +102,15 @@ objects:
       group_id: "${NAME}"
       type: address-config
     name: address-config-${NAME}
+- apiVersion: v1
+  data:
+    hawkular-openshift-agent: '{"endpoints": [{"collection_interval": "60s", "metrics":
+      [{"id": "VM Heap Memory Used", "name": "java.lang:type=Memory#HeapMemoryUsage#used",
+      "type": "gauge"}], "path": "/jolokia", "port": 8161, "protocol": "http", "type":
+      "jolokia"}]}'
+  kind: ConfigMap
+  metadata:
+    name: hawkular-config-${NAME}
 parameters:
 - description: Storage capacity required for volume claims
   name: STORAGE_CAPACITY
